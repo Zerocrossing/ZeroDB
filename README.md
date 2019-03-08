@@ -1,0 +1,2 @@
+# ZeroDB
+A discord bot
