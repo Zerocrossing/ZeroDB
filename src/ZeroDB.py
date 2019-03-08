@@ -1,5 +1,5 @@
 """
-Zerobot.py
+ZeroDB.py
 A simple discord bot
 """
 import discord
@@ -81,12 +81,21 @@ def load_modules():
     modules.append(reply)
     modules.append(mock)
 
+def get_token():
+    """
+    Gets the discord token from a local file called ./token.ini
+    """
+    f = open("./token.ini", 'r')
+    token = f.readline()
+    f.close()
+    return token
 
 def startup():
     global config
     config.read('config.ini')
     load_modules()
-    client.run(config['security']['token'])
+    token = get_token()
+    client.run(token)
 
 
 async def reply(message, reply):
