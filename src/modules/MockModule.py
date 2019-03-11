@@ -66,27 +66,31 @@ class Mock(ZM):
         helper method. Takes a message and sends it back but in AlTeRnAtInG cApS
         """
         pwnd = ""
-        case = True
         chance_thresh = self.config.getfloat(self.name,"emoji_chance")
         max_emoji = self.config.getint(self.name, "max_emoji")
         emoji = [":joy:", ":clap:", ":ok_hand:", ":sweat_drops:", ":eggplant:", ":100:", ":laughing:"]
-        for c in message.content:
-            # spaces have a chance to add emoji
-            if c.isspace():
-                add_emoji = random.random() < chance_thresh
-                if add_emoji:
-                    pwnd += " "
-                    for n in range(random.randint(1, max_emoji)):
-                        pwnd += random.choice(emoji)
-                    pwnd += " "
-                else:
-                    pwnd += c
+        for word in message.content.split():
+            # skip emoji
+            if word.startswith(":"):
+                pwnd += word + " "
                 continue
-            # else we alternate caps of characters
+            pwnd +=  await self.alt_cap(word) + " "
+            add_emoji = random.random() < chance_thresh
+            if add_emoji:
+                pwnd += " "
+                for n in range(random.randint(1, max_emoji)):
+                    pwnd += random.choice(emoji)
+                pwnd += " "
+        await self.reply(message,pwnd)
+
+    async def alt_cap(self, str_in):
+        case = False
+        pwnd = ""
+        for c in str_in:
             if case:
-                case = not case
                 pwnd += c.upper()
-            else:
                 case = not case
+            else:
                 pwnd += c.lower()
-        await self.reply(message, pwnd)
+                case = not case
+        return pwnd
