@@ -6,9 +6,9 @@ import discord
 import configparser
 
 # Custom modules
-from src.ReplyModule import Reply
-from src.MockModule import Mock
-
+from modules.ReplyModule import Reply
+from modules.MockModule import Mock
+from modules.SciWhy import SciWhy
 # evil globals
 config = configparser.ConfigParser()
 client = discord.Client()
@@ -78,21 +78,24 @@ def load_modules():
     global modules
     reply = Reply("reply", client, config)
     mock = Mock("mock", client, config)
+    sciwhy = SciWhy("sciwhy", client, config)
+
     modules.append(reply)
     modules.append(mock)
+    modules.append(sciwhy)
 
 def get_token():
     """
     Gets the discord token from a local file called ./token.ini
     """
-    f = open("./token.ini", 'r')
+    f = open("../cfg/token.ini", 'r')
     token = f.readline()
     f.close()
     return token
 
 def startup():
     global config
-    config.read('config.ini')
+    config.read('../cfg/config.ini')
     load_modules()
     token = get_token()
     client.run(token)

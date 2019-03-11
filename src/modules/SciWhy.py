@@ -51,7 +51,7 @@ class SciWhy(ZM):
         """
         This message loads a list of novels from a .json file
         """
-        book_file = open('src/sf_books.json', 'r')
+        book_file = open('../data/sf_books.json', 'r')
         book_list = json.load(book_file)
         book_file.close()
         return book_list
